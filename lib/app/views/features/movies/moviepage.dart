@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:free_movie/app/model/movie.dart';
 import 'package:free_movie/app/utils/app_colors.dart';
+import 'package:free_movie/app/views/features/movies/moviepaging.dart';
 import 'package:free_movie/bloc/movie/movielist_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -149,13 +150,25 @@ class MoviepageState extends State<Moviepage> {
                         ),
                       ),
                       const Spacer(),
-                      Container(
-                        margin: const EdgeInsets.only(right: 10.0),
-                        child: Text(
-                          "See all",
-                          style: GoogleFonts.firaSansCondensed(
-                            fontSize: 16.0,
-                            color: AppColors.select_color,
+
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (context) =>
+                                  Moviepaging(title: "Popular", position: 1),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 10.0),
+                          child: Text(
+                            "See all",
+                            style: GoogleFonts.firaSansCondensed(
+                              fontSize: 16.0,
+                              color: AppColors.select_color,
+                            ),
                           ),
                         ),
                       ),
@@ -244,13 +257,24 @@ class MoviepageState extends State<Moviepage> {
                         ),
                       ),
                       const Spacer(),
-                      Container(
-                        margin: const EdgeInsets.only(right: 10.0),
-                        child: Text(
-                          "See all",
-                          style: GoogleFonts.firaSansCondensed(
-                            fontSize: 16.0,
-                            color: AppColors.select_color,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (context) =>
+                                  Moviepaging(title: "Top Rated", position: 2),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 10.0),
+                          child: Text(
+                            "See all",
+                            style: GoogleFonts.firaSansCondensed(
+                              fontSize: 16.0,
+                              color: AppColors.select_color,
+                            ),
                           ),
                         ),
                       ),
@@ -339,13 +363,26 @@ class MoviepageState extends State<Moviepage> {
                         ),
                       ),
                       const Spacer(),
-                      Container(
-                        margin: const EdgeInsets.only(right: 10.0),
-                        child: Text(
-                          "See all",
-                          style: GoogleFonts.firaSansCondensed(
-                            fontSize: 16.0,
-                            color: AppColors.select_color,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (context) => Moviepaging(
+                                title: "Now Playing",
+                                position: 3,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 10.0),
+                          child: Text(
+                            "See all",
+                            style: GoogleFonts.firaSansCondensed(
+                              fontSize: 16.0,
+                              color: AppColors.select_color,
+                            ),
                           ),
                         ),
                       ),
@@ -500,13 +537,24 @@ class MoviepageState extends State<Moviepage> {
                         ),
                       ),
                       const Spacer(),
-                      Container(
-                        margin: const EdgeInsets.only(right: 10.0),
-                        child: Text(
-                          "See all",
-                          style: GoogleFonts.firaSansCondensed(
-                            fontSize: 16.0,
-                            color: AppColors.select_color,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (context) =>
+                                  Moviepaging(title: "Upcoming", position: 4),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 10.0),
+                          child: Text(
+                            "See all",
+                            style: GoogleFonts.firaSansCondensed(
+                              fontSize: 16.0,
+                              color: AppColors.select_color,
+                            ),
                           ),
                         ),
                       ),
