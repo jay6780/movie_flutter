@@ -2,7 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:free_movie/app/utils/app_colors.dart';
-import 'package:free_movie/app/views/movieseries.dart';
+import 'package:free_movie/app/views/widgets/selector.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Home extends StatefulWidget {
@@ -42,9 +42,9 @@ class HomeState extends State<Home> {
         color: AppColors.bottomnav,
         key: _bottomNavigationKey,
         items: <Widget>[
-          SvgPicture.asset('image/search.svg', width: 20.0, height: 20.0),
-          SvgPicture.asset('image/home.svg', width: 20.0, height: 20.0),
-          SvgPicture.asset('image/bookmark.svg', width: 20.0, height: 20.0),
+          SvgPicture.asset('image/search.svg', width: 30.0, height: 30.0),
+          SvgPicture.asset('image/home.svg', width: 30.0, height: 30.0),
+          SvgPicture.asset('image/bookmark.svg', width: 30.0, height: 30.0),
         ],
         onTap: (index) {
           setState(() {
@@ -100,7 +100,7 @@ Widget _getPage(int page) {
         ),
       );
     case 1:
-      return Movieseries();
+      return Selector();
     case 2:
       return Center(
         child: Text(
@@ -113,6 +113,6 @@ Widget _getPage(int page) {
         ),
       );
     default:
-      return Movieseries();
+      return Selector();
   }
 }

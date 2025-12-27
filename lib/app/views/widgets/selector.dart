@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:free_movie/app/utils/app_colors.dart';
-import 'package:free_movie/app/views/moviepage.dart';
+import 'package:free_movie/app/views/features/movies/moviepage.dart';
+import 'package:free_movie/app/views/features/tvseries/tvseriespage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Movieseries extends StatefulWidget {
-  Movieseries({super.key});
+class Selector extends StatefulWidget {
+  Selector({super.key});
 
   @override
   MovieseriesState createState() => MovieseriesState();
 }
 
-class MovieseriesState extends State<Movieseries> {
+class MovieseriesState extends State<Selector> {
   late bool isMovies = true;
   @override
   void initState() {
@@ -63,22 +64,7 @@ class MovieseriesState extends State<Movieseries> {
           ),
         ),
 
-        Expanded(
-          child: isMovies
-              ? Moviepage()
-              : Container(
-                  color: AppColors.background,
-                  child: Center(
-                    child: Text(
-                      "TV Series Coming Soon",
-                      style: GoogleFonts.firaSansCondensed(
-                        fontSize: 16.0,
-                        color: AppColors.white,
-                      ),
-                    ),
-                  ),
-                ),
-        ),
+        Expanded(child: isMovies ? Moviepage() : Tvseriespage()),
       ],
     );
   }

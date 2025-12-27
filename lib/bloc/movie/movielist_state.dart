@@ -25,8 +25,8 @@ class MovieFetchSuccess extends MovielistState {
   });
 }
 
-class PopularFailure extends MovielistState {
+class MovieFailure extends MovielistState {
   final String errorMessage;
 
-  const PopularFailure({required this.errorMessage});
+  const MovieFailure({required this.errorMessage});
 }

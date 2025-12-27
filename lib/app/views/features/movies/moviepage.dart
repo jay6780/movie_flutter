@@ -3,54 +3,122 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:free_movie/app/model/movie.dart';
 import 'package:free_movie/app/utils/app_colors.dart';
-import 'package:free_movie/bloc/movielist_bloc.dart';
+import 'package:free_movie/bloc/movie/movielist_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shimmer/shimmer.dart';
 
-class Moviepage extends StatelessWidget {
+class Moviepage extends StatefulWidget {
   const Moviepage({super.key});
+
+  @override
+  MoviepageState createState() => MoviepageState();
+}
+
+class MoviepageState extends State<Moviepage> {
+  late RefreshController _refreshController;
+  bool isRefresh = true;
+  @override
+  void initState() {
+    super.initState();
+    _refreshController = RefreshController(initialRefresh: false);
+  }
+
+  void _onRefresh() async {
+    context.read<MovielistBloc>().add(MoviefetchEvent(page: 1));
+    await Future.delayed(Duration(milliseconds: 500));
+    isRefresh = false;
+    _refreshController.refreshCompleted();
+  }
+
+  void _onLoading() async {
+    final currentState = context.read<MovielistBloc>().state;
+    if (currentState is MovieFetchSuccess) {
+      await Future.delayed(Duration(milliseconds: 1000));
+    }
+
+    _refreshController.loadComplete();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _refreshController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: const Color.fromRGBO(49, 54, 71, 1),
       body: BlocBuilder<MovielistBloc, MovielistState>(
         builder: (context, state) {
-          switch (state.runtimeType) {
-            case MovielistInitial:
-            case MovielisLoading:
-              return const Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                ),
-              );
-            case MovieFetchSuccess:
-              final successState = state as MovieFetchSuccess;
-              return _movies(
-                context,
-                popular: successState.popular,
-                toprated: successState.toprated,
-                nowPlaying: successState.nowPlaying,
-                upcoming: successState.upcoming,
-              );
-            case PopularFailure:
-              final errorState = state as PopularFailure;
-              return Center(
-                child: Text(
-                  errorState.errorMessage,
-                  style: GoogleFonts.firaSansCondensed(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              );
-            default:
-              return Container();
+          if (state is MovieFetchSuccess) {
+            isRefresh = false;
+            if (_refreshController.isRefresh) {
+              _refreshController.refreshCompleted();
+            }
           }
+          if (state is MovieFailure) {
+            if (_refreshController.isRefresh) {
+              _refreshController.refreshFailed();
+            }
+          }
+          return SmartRefresher(
+            enablePullDown: true,
+            enablePullUp: false,
+            header: ClassicHeader(
+              refreshingIcon: SizedBox(
+                width: 25,
+                height: 25,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+                ),
+              ),
+            ),
+
+            controller: _refreshController,
+            onRefresh: _onRefresh,
+            onLoading: _onLoading,
+            child: _builMovieUi(context, state),
+          );
         },
       ),
     );
+  }
+
+  Widget _builMovieUi(BuildContext context, MovielistState state) {
+    if (state is MovielisLoading || state is MovielistInitial) {
+      return Visibility(
+        visible: isRefresh,
+        child: Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          ),
+        ),
+      );
+    } else if (state is MovieFetchSuccess) {
+      isRefresh = false;
+      return _movies(
+        context,
+        popular: state.popular,
+        toprated: state.toprated,
+        nowPlaying: state.nowPlaying,
+        upcoming: state.upcoming,
+      );
+    } else if (state is MovieFailure) {
+      return Center(
+        child: Text(
+          state.errorMessage,
+          style: GoogleFonts.firaSansCondensed(
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+      );
+    }
+    return Container();
   }
 
   Widget _movies(
@@ -137,7 +205,7 @@ class Moviepage extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  popular[index].originalTitle.toString(),
+                                  popular[index].getOriginalTitle.toString(),
                                   overflow: TextOverflow.fade,
                                   maxLines: 1,
                                   softWrap: false,
