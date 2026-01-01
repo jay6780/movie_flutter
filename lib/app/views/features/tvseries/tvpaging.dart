@@ -3,28 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:free_movie/app/model/movie.dart';
+import 'package:free_movie/app/model/tvseries.dart';
 import 'package:free_movie/app/utils/app_colors.dart';
-import 'package:free_movie/bloc/movie_pagination/moviepagination_bloc.dart';
+import 'package:free_movie/bloc/tvseries_pagination/tvseriespaging_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shimmer/shimmer.dart';
 
-class Moviepaging extends StatefulWidget {
+class Tvpaging extends StatefulWidget {
   String? title;
   int position;
-  Moviepaging({super.key, required this.title, required this.position});
+  Tvpaging({super.key, required this.title, required this.position});
 
   @override
   MoviePagingUiState createState() => MoviePagingUiState();
 }
 
-class MoviePagingUiState extends State<Moviepaging> {
+class MoviePagingUiState extends State<Tvpaging> {
   late RefreshController _refreshController;
   late ScrollController scrollController;
   int page = 1;
-  bool nomore = false;
   int position = 1;
+  bool nomore = false;
   late List<Results> viewall = [];
   @override
   void initState() {
@@ -34,35 +34,20 @@ class MoviePagingUiState extends State<Moviepaging> {
     scrollController = ScrollController();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<MoviepaginationBloc>().add(
-        MoviepaginationfetchEvent(page: page, position: position),
+      context.read<TvseriespagingBloc>().add(
+        TvseriespagingfetchEvent(page: page, position: position),
       );
     });
 
-    scrollController.addListener(() async {
+    scrollController.addListener(() {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
+        if (nomore) {
+          return;
+        }
         _loadmore();
       }
     });
-  }
-
-  void _loadmore() async {
-    page++;
-
-    context.read<MoviepaginationBloc>().add(
-      MoviepaginationfetchEvent(page: page, position: position),
-    );
-    _refreshController.loadComplete();
-  }
-
-  void _onRefresh() async {
-    context.read<MoviepaginationBloc>().add(
-      MoviepaginationfetchEvent(page: 1, position: position),
-    );
-    viewall.clear();
-    await Future.delayed(Duration(milliseconds: 500));
-    _refreshController.refreshCompleted();
   }
 
   void _scrollToTopAnimated() {
@@ -73,6 +58,26 @@ class MoviePagingUiState extends State<Moviepaging> {
         curve: Curves.easeInOut,
       );
     }
+  }
+
+  void _loadmore() async {
+    page++;
+    context.read<TvseriespagingBloc>().add(
+      TvseriespagingfetchEvent(page: page, position: position),
+    );
+    _refreshController.loadComplete();
+  }
+
+  void _onRefresh() async {
+    page = 1;
+    nomore = false;
+    viewall.clear();
+
+    context.read<TvseriespagingBloc>().add(
+      TvseriespagingfetchEvent(page: 1, position: position),
+    );
+    await Future.delayed(Duration(milliseconds: 500));
+    _refreshController.refreshCompleted();
   }
 
   @override
@@ -108,9 +113,10 @@ class MoviePagingUiState extends State<Moviepaging> {
                   ),
                 ),
               ),
+
               Container(
-                alignment: Alignment.center,
                 margin: EdgeInsets.only(top: 13),
+                alignment: Alignment.center,
                 child: Text(
                   widget.title.toString(),
                   style: GoogleFonts.firaSansCondensed(
@@ -145,9 +151,9 @@ class MoviePagingUiState extends State<Moviepaging> {
             color: AppColors.white,
           ),
           Expanded(
-            child: BlocConsumer<MoviepaginationBloc, MoviepaginationState>(
+            child: BlocConsumer<TvseriespagingBloc, TvseriespagingState>(
               listener: (context, state) {
-                if (state is MoviepaginationSuccess) {
+                if (state is TvseriespagingSuccess) {
                   if (state.allList.isNotEmpty) {
                     viewall.addAll(state.allList);
                     nomore = false;
@@ -155,7 +161,7 @@ class MoviePagingUiState extends State<Moviepaging> {
                     nomore = true;
                     _refreshController.loadNoData();
                   }
-                } else if (state is MoviepaginationFailure) {
+                } else if (state is TvseriespagingFailure) {
                   if (_refreshController.isRefresh) {
                     _refreshController.refreshFailed();
                   }
@@ -193,6 +199,7 @@ class MoviePagingUiState extends State<Moviepaging> {
 
                   controller: _refreshController,
                   onRefresh: _onRefresh,
+
                   child: _createpagination(context, viewall),
                 );
               },
@@ -256,7 +263,7 @@ Widget _buildMangaCard(BuildContext context, Results results) {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            results.getTitle,
+            results.getOriginalName.toString(),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,

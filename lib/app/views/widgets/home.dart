@@ -2,6 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:free_movie/app/utils/app_colors.dart';
+import 'package:free_movie/app/views/navbar/navbar.dart';
 import 'package:free_movie/app/views/widgets/selector.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -15,7 +16,8 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> {
   late bool isMovies = false;
   int _page = 1;
-  GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
+  final GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
@@ -35,6 +37,8 @@ class HomeState extends State<Home> {
     });
 
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: Navbar(),
       backgroundColor: AppColors.background,
       bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: AppColors.background,
@@ -58,23 +62,32 @@ class HomeState extends State<Home> {
         backgroundColor: AppColors.background,
         title: SizedBox(
           width: MediaQuery.of(context).size.width,
-          child: Row(
-            spacing: 100,
+          child: Stack(
             children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: Image.asset(
-                  'image/hamburger.png',
-                  width: 30.0,
-                  height: 30.0,
+              GestureDetector(
+                onTap: () {
+                  _scaffoldKey.currentState!.openDrawer();
+                },
+                child: Container(
+                  alignment: Alignment.topLeft,
+                  child: SvgPicture.asset(
+                    'image/hamburger.svg',
+                    width: 30.0,
+                    height: 30.0,
+                  ),
                 ),
               ),
-              Text(
-                "PinoyFlix",
-                style: GoogleFonts.firaSansCondensed(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+
+              Container(
+                margin: EdgeInsets.only(top: 3.0),
+                alignment: Alignment.center,
+                child: Text(
+                  "PinoyFlix",
+                  style: GoogleFonts.firaSansCondensed(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ],

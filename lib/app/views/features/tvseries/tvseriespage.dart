@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:free_movie/app/model/tvseries.dart';
 import 'package:free_movie/app/utils/app_colors.dart';
+import 'package:free_movie/app/views/features/tvseries/tvpaging.dart';
 import 'package:free_movie/bloc/tvseries/tvseries_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
@@ -101,7 +102,7 @@ class TvseriesSUItate extends State<Tvseriespage> {
 
       return _tvseries(
         context,
-        airing: state.popular,
+        airing: state.airing,
         ontheair: state.ontheair,
         popular: state.popular,
         toprated: state.toprated,
@@ -149,13 +150,25 @@ class TvseriesSUItate extends State<Tvseriespage> {
                         ),
                       ),
                       const Spacer(),
-                      Container(
-                        margin: const EdgeInsets.only(right: 10.0),
-                        child: Text(
-                          "See all",
-                          style: GoogleFonts.firaSansCondensed(
-                            fontSize: 16.0,
-                            color: AppColors.select_color,
+
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (context) =>
+                                  Tvpaging(title: "Airing today", position: 1),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 10.0),
+                          child: Text(
+                            "See all",
+                            style: GoogleFonts.firaSansCondensed(
+                              fontSize: 16.0,
+                              color: AppColors.select_color,
+                            ),
                           ),
                         ),
                       ),
@@ -245,13 +258,24 @@ class TvseriesSUItate extends State<Tvseriespage> {
                         ),
                       ),
                       const Spacer(),
-                      Container(
-                        margin: const EdgeInsets.only(right: 10.0),
-                        child: Text(
-                          "See all",
-                          style: GoogleFonts.firaSansCondensed(
-                            fontSize: 16.0,
-                            color: AppColors.select_color,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (context) =>
+                                  Tvpaging(title: "On the Air", position: 2),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 10.0),
+                          child: Text(
+                            "See all",
+                            style: GoogleFonts.firaSansCondensed(
+                              fontSize: 16.0,
+                              color: AppColors.select_color,
+                            ),
                           ),
                         ),
                       ),
@@ -341,13 +365,25 @@ class TvseriesSUItate extends State<Tvseriespage> {
                         ),
                       ),
                       const Spacer(),
-                      Container(
-                        margin: const EdgeInsets.only(right: 10.0),
-                        child: Text(
-                          "See all",
-                          style: GoogleFonts.firaSansCondensed(
-                            fontSize: 16.0,
-                            color: AppColors.select_color,
+
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (context) =>
+                                  Tvpaging(title: "Popular", position: 3),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 10.0),
+                          child: Text(
+                            "See all",
+                            style: GoogleFonts.firaSansCondensed(
+                              fontSize: 16.0,
+                              color: AppColors.select_color,
+                            ),
                           ),
                         ),
                       ),
@@ -504,13 +540,25 @@ class TvseriesSUItate extends State<Tvseriespage> {
                         ),
                       ),
                       const Spacer(),
-                      Container(
-                        margin: const EdgeInsets.only(right: 10.0),
-                        child: Text(
-                          "See all",
-                          style: GoogleFonts.firaSansCondensed(
-                            fontSize: 16.0,
-                            color: AppColors.select_color,
+
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (context) =>
+                                  Tvpaging(title: "Top Rated", position: 4),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 10.0),
+                          child: Text(
+                            "See all",
+                            style: GoogleFonts.firaSansCondensed(
+                              fontSize: 16.0,
+                              color: AppColors.select_color,
+                            ),
                           ),
                         ),
                       ),

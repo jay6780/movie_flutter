@@ -6,9 +6,9 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class ApiService {
   final _baseUrl = "https://api.themoviedb.org/3/";
-  final _receiveTimeout = const Duration(seconds: 60);
-  final _connectTimeout = const Duration(seconds: 60);
-  final _sendTimeout = const Duration(seconds: 60);
+  final _receiveTimeout = const Duration(seconds: 10);
+  final _connectTimeout = const Duration(seconds: 10);
+  final _sendTimeout = const Duration(seconds: 15);
 
   late Dio _dio;
   bool isDev = Appconstant.isDev;
